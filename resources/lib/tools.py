@@ -125,8 +125,28 @@ def execute_builtin(bi):
     xbmc.executebuiltin(bi)
 
 
-def execute_jsonrpc(params):
-    params.update({"id": 1})
-    call = json.dumps(params)
-    response = xbmc.executeJSONRPC(call)
-    return json.loads(response)
+def execute_jsonrpc(method, params=None):
+    request_data = {
+        "jsonrpc": "2.0",
+        "method": method,
+        "id": 1,
+        "params": params or {},
+    }
+    response = json.loads(xbmc.executeJSONRPC(json.dumps(request_data)))
+    if "error" in response:
+        log(
+            "JsonRPC Error {}: {}".format(
+                response["error"]["code"], response["error"]["message"]
+            ),
+            "debug",
+        )
+    return response.get("result", {})
+
+
+def convert_time_to_seconds(time_obj):
+    return (
+        (time_obj.hour * 3600)
+        + (time_obj.minute * 60)
+        + time_obj.second
+        + time_obj.microsecond / 1000000
+    )

@@ -3,10 +3,13 @@
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <!-- <import addon="script.module.requests"/> --> <!-- Not used at the moment -->
+		<import addon="script.service.a4ksubtitles" optional="true"/> <!-- NOT TECHNICALLY OPTIONAL -->
+
+        <import addon="script.module.web-pdb" optional="true"/>
     </requires>
     <extension point="xbmc.service" library="main.py" start="login"/>
     <extension point="xbmc.addon.metadata">
-        <summary lang="en_GB">Skip intros and outros for TV Shows.</summary>
+        <summary lang="en_GB">Skip intros for TV Shows.</summary>
         <description lang="en_GB"></description>
         <language></language>
         <platform>all</platform>
