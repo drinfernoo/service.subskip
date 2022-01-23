@@ -2,6 +2,7 @@
 <addon id="script.skipintro" name="Skip Intro" version="0.0.1" provider-name="drinfernoo">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
+        <!-- <import addon="script.module.requests"/> --> <!-- Not used at the moment -->
     </requires>
     <extension point="xbmc.service" library="main.py" start="login"/>
     <extension point="xbmc.addon.metadata">

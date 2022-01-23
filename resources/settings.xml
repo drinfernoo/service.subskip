@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-    <setting id="debug" type="bool" label="32001" default="false"/>
+    <!-- <category label="OpenSubtitles">
+        <setting type="lsep" label="Account Information"/>
+        <setting id="general.username" type="text" label="Username" default=""/>
+        <setting id="general.password" type="text" label="Password" option="hidden" default=""/>
+        <setting id="general.token" type="text" label="Authorization Token" default="" visible="false"/>
+    </category> -->
 </settings>
 
