@@ -2,6 +2,7 @@ import xbmc
 import xbmcgui
 
 from resources.lib import tools
+from resources.lib import settings
 
 OK_BUTTON = 201
 ACTION_PREVIOUS_MENU = 10
@@ -16,7 +17,7 @@ class IntroSkipDialog(xbmcgui.WindowXMLDialog):
         self.skip_time = skip_time
 
     def onInit(self):
-        skipLabel = "SKIP TO {}".format(self.skip_time)
+        skipLabel = "{} >".format(settings.get_localized_string(30000))
         skipButton = self.getControl(OK_BUTTON)
         skipButton.setLabel(skipLabel)
         
