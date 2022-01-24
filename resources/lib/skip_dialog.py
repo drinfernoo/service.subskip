@@ -32,7 +32,6 @@ class IntroSkipDialog(xbmcgui.WindowXMLDialog):
 
     def onClick(self, control):
         if control == OK_BUTTON:
-            # TODO: Maybe seek to ~1sec before?
-            xbmc.Player().seekTime(tools.convert_time_to_seconds(self.skip_time))
+            xbmc.Player().seekTime(tools.convert_time_to_seconds(self.skip_time) - 1)
 
             self.close()
