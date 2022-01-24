@@ -17,9 +17,10 @@ def get_kodi_subtitle_languages(iso_format=False):
         "Settings.GetSettingValue", {"setting": "subtitles.languages"}
     )
     if iso_format:
-        return [self.convert_language_iso(x) for x in subtitle_language["value"]]
+        return [convert_language_iso(x) for x in subtitle_language["value"]]
     else:
         return [x for x in subtitle_language["value"]]
+
 
 def get_kodi_preferred_subtitle_language(iso_format=False):
     subtitle_language = tools.execute_jsonrpc(
@@ -28,10 +29,10 @@ def get_kodi_preferred_subtitle_language(iso_format=False):
     if subtitle_language["value"] in ["forced_only", "original", "default", "none"]:
         return subtitle_language["value"]
     if iso_format:
-        return self.convert_language_iso(subtitle_language["value"])
+        return convert_language_iso(subtitle_language["value"])
     else:
         return subtitle_language["value"]
-        
+
 
 def convert_language_iso(from_value):
     return xbmc.convertLanguage(from_value, xbmc.ISO_639_1)
@@ -44,7 +45,7 @@ class A4kSubtitlesAdapter:
 
     def __init__(self):
         path = os.path.join(_addons_path, "service.subtitles.a4ksubtitles")
-        
+
         try:
             sys.path.append(path)
             self.service = importlib.import_module("a4kSubtitles.api").A4kSubtitlesApi()
@@ -79,7 +80,7 @@ class A4kSubtitlesAdapter:
             settings = extra.pop("settings", None)
             return self.service.download(request, settings)
         except (OSError, IOError):
-            g.log("Unable to download subtitle, file already exists", "error")
+            tools.log("Unable to download subtitle, file already exists", "error")
         except Exception as e:
-            g.log("Unknown error acquiring subtitle: {}".format(e), "error")
-            g.log_stacktrace()
+            tools.log("Unknown error acquiring subtitle: {}".format(e), "error")
+            tools.log_stacktrace()
