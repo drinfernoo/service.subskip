@@ -7,14 +7,16 @@ from resources.lib.identify import IdentifyCreditsIntro
 
 class Player(xbmc.Player):
     def __init__(self):
-        super().__init__('Player')
+        super().__init__("Player")
+        self.identify = IdentifyCreditsIntro()
         self.intro = None
 
-    def intro_skipped(self):
+    def reset_intro(self):
+        self.identify.initialize()
         self.intro = None
 
     def onAVStarted(self):
-        identify = IdentifyCreditsIntro()
+        if self.getVideoInfoTag().getMediaType() == "episode":
         self.intro = identify.get_intro()
         if self.intro:
             tools.log(
@@ -25,4 +27,4 @@ class Player(xbmc.Player):
             tools.log("No intro could be detected.", "info")
 
     def onPlayBackStopped(self):
-        self.intro = None
+        self.reset_intro()

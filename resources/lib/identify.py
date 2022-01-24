@@ -8,22 +8,23 @@ from urllib.parse import unquote
 import pysrt
 
 from resources.lib import tools
-from resources.lib import a4ksubs
+from resources.lib import subtitles
 from resources.lib.thread_pool import ThreadPool
 
 
 class IdentifyCreditsIntro:
     def __init__(self):
-        self.start_point = None
-        self.end_point = None
-        self.a4k_api = a4ksubs.A4kSubtitlesAdapter()
-
-        self.subtitle_languages = a4ksubs.get_kodi_subtitle_languages()
-        self.preferred_language = a4ksubs.get_kodi_preferred_subtitle_language()
+        self.a4k_api = subtitles.A4kSubtitlesAdapter()
+        self.subtitle_languages = subtitles.get_kodi_subtitle_languages()
+        self.preferred_language = subtitles.get_kodi_preferred_subtitle_language()
         self.base_request = {
             "languages": ",".join(self.subtitle_languages),
             "preferredlanguage": self.preferred_language,
         }
+
+        self.initialize()
+
+    def initialize(self):
         self._sub_contents = []
         self._potentials = []
         self.total_time = 0
@@ -38,7 +39,6 @@ class IdentifyCreditsIntro:
             return self._potentials[0]
 
     def _identify_points(self):
-        # extract the sub file from the zip
         self._sub_contents = self._get_subtitles()
         if not self._sub_contents:
             return None
@@ -60,22 +60,7 @@ class IdentifyCreditsIntro:
             tools.log("No subtitles could be found for the playing file.", "info")
             return []
 
-        playing_file = xbmc.Player().getPlayingFile()
-        current_release = unquote(os.path.split(playing_file)[1].lower())[:-4]
-
-        pool = ThreadPool()
-        for sub in sub_results:
-            pool.put(self._distance_from_release, sub, current_release)
-        distances = pool.wait_completion()
-        matches = sorted(distances, key=lambda x: x[0])
-
-        if matches[0][0] != 0:
-            tools.log(
-                "A subtitle matching the current release could not be found. Skip points may not be accurate.",
-                "info",
-            )
-
-        download = self.a4k_api.download(matches[0][1])
+        download = self.a4k_api.download(sub_results[0])
         if not download:
             tools.log("Subtitle file could not be downloaded.", "info")
             return []
@@ -83,9 +68,6 @@ class IdentifyCreditsIntro:
         sub_contents = pysrt.open(download)
 
         return sub_contents
-
-    def _distance_from_release(self, sub, current_release):
-        return (tools.levenshteinDistanceDP(sub["name"].lower(), current_release), sub)
 
     def _identify_potential_gap(self, index, current_sub, next_sub, threshold=15):
         start = tools.convert_time_to_seconds(current_sub.start.to_time())
