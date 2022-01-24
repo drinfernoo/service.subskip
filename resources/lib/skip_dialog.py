@@ -10,7 +10,9 @@ ACTION_BACK = 92
 
 
 class IntroSkipDialog(xbmcgui.WindowXMLDialog):
-    def __init__(self, xmlFilename, scriptPath, defaultSkin='Default', defaultRes='720p'):
+    def __init__(
+        self, xmlFilename, scriptPath, defaultSkin='Default', defaultRes='720p'
+    ):
         self.skip_time = 0
 
     def set_skip_time(self, skip_time):
@@ -20,16 +22,10 @@ class IntroSkipDialog(xbmcgui.WindowXMLDialog):
         skipLabel = "{} >".format(settings.get_localized_string(30000))
         skipButton = self.getControl(OK_BUTTON)
         skipButton.setLabel(skipLabel)
-        
+
     def onAction(self, action):
         if action == ACTION_PREVIOUS_MENU or action == ACTION_BACK:
             self.close()
-
-    def onControl(self, control):
-        pass
-
-    def onFocus(self, control):
-        pass
 
     def onClick(self, control):
         if control == OK_BUTTON:

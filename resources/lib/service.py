@@ -14,6 +14,8 @@ def run():
     monitor = xbmc.Monitor()
     player = Player()
 
+    dialog = IntroSkipDialog("intro_skip_dialog.xml", _addon_path, "Default", "1080i")
+
     while not monitor.abortRequested():
         if monitor.waitForAbort(5):
             # Abort was requested while waiting. We should exit
@@ -21,10 +23,6 @@ def run():
 
         if player.isPlayingVideo() and player.intro:
             current_time = player.getTime()
-
-            dialog = IntroSkipDialog(
-                "intro_skip_dialog.xml", _addon_path, "Default", "1080i"
-            )
             dialog.set_skip_time(player.intro[1])
 
             if player.intro and current_time >= tools.convert_time_to_seconds(
