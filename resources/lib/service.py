@@ -11,6 +11,7 @@ _addon_path = xbmcvfs.translatePath(settings.get_addon_info('path'))
 
 
 def run():
+    tools.log("Service starting...", "info")
     monitor = xbmc.Monitor()
     player = Player()
 

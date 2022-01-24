@@ -13,6 +13,7 @@ from xml.etree import ElementTree
 from resources.lib import settings
 
 _addon_name = settings.get_addon_info("name")
+_addon_id = settings.get_addon_info("id")
 
 _log_levels = {
     "debug": xbmc.LOGDEBUG,
@@ -91,7 +92,7 @@ def parse_xml(file=None, text=None):
 
 
 def log(msg, level="debug"):
-    xbmc.log(_addon_name + ": " + msg, level=_log_levels[level])
+    xbmc.log("[ {} ] {}".format(_addon_id, msg), level=_log_levels[level])
 
 
 def ensure_path_is_dir(path):
