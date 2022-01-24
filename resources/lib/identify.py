@@ -38,16 +38,18 @@ class IdentifyCreditsIntro:
         if len(self._potentials) >= 1:
             return self._potentials[0]
 
-    def _identify_points(self):
+    def _identify_points(self, threshold=15, ratio=0.25):
         self._sub_contents = self._get_subtitles()
         if not self._sub_contents:
             return None
 
-        for i, sub in enumerate(self._sub_contents):
+        for i, sub in enumerate(self._sub_contents[:int(len(self._sub_contents) * ratio)]):
             gap = self._identify_potential_gap(
                 i,
                 sub,
                 self._sub_contents[i + 1] if i < (len(self._sub_contents) - 1) else sub,
+                threshold=threshold,
+                ratio=ratio
             )
             if gap:
                 self._potentials.append(gap)
@@ -69,7 +71,7 @@ class IdentifyCreditsIntro:
 
         return sub_contents
 
-    def _identify_potential_gap(self, index, current_sub, next_sub, threshold=15):
+    def _identify_potential_gap(self, index, current_sub, next_sub, threshold=15, ratio=0.25):
         start = tools.convert_time_to_seconds(current_sub.start.to_time())
         end = tools.convert_time_to_seconds(current_sub.end.to_time())
 
@@ -81,7 +83,7 @@ class IdentifyCreditsIntro:
         if index == 0 and start > threshold:
             return (time(0, 0, 0), current_sub.start.to_time())
         elif index > 0:
-            if start < (self.total_time / 4):
+            if start < (self.total_time * ratio):
                 next_start = tools.convert_time_to_seconds(next_sub.start.to_time())
                 next_end = tools.convert_time_to_seconds(next_sub.end.to_time())
 
