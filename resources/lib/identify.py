@@ -3,19 +3,19 @@ import xbmc
 import os
 from datetime import time
 
+from urllib.parse import unquote
+
 import pysrt
 
 from resources.lib import tools
-
-# from resources.lib.opensubs import OpenSubsApi
 from resources.lib import a4ksubs
+from resources.lib.thread_pool import ThreadPool
 
 
 class IdentifyCreditsIntro:
     def __init__(self):
         self.start_point = None
         self.end_point = None
-        # self.os_api = OpenSubsApi()
         self.a4k_api = a4ksubs.A4kSubtitlesAdapter()
 
         self.subtitle_languages = a4ksubs.get_kodi_subtitle_languages()
@@ -57,18 +57,21 @@ class IdentifyCreditsIntro:
             return []
 
         playing_file = xbmc.Player().getPlayingFile()
-        current_release = os.path.split(playing_file)[1].lower()
+        current_release = unquote(os.path.split(playing_file)[1].lower())[:-4]
 
-        # TODO: Find a way to match the playing release to the sub we need.
-        # subs = [i for i in sub_results if i["attributes"]["release"].lower() in current_release]
-        # if not subs:
-        # tools.log("A subtitle matching the current release could not be found.", "info")
-        # return []
+        pool = ThreadPool()
+        for sub in sub_results:
+            pool.put(self._distance_from_release, sub, current_release)
+        distances = pool.wait_completion()
+        matches = sorted(distances, key=lambda x: x[0])
 
-        # sub = sub_results[0]
-        # sub_file = sub["attributes"]["files"][0]
+        if matches[0][0] != 0:
+            tools.log(
+                "A subtitle matching the current release could not be found. Skip points may not be accurate.",
+                "info",
+            )
 
-        download = self.a4k_api.download(sub_results[0])
+        download = self.a4k_api.download(matches[0][1])
         if not download:
             tools.log("Subtitle file could not be downloaded.", "info")
             return []
@@ -77,9 +80,9 @@ class IdentifyCreditsIntro:
 
         return sub_contents
 
-    def _identify_potential(self, index, sub, threshold=15):
-        start = tools.convert_time_to_seconds(sub.start.to_time())
-        end = tools.convert_time_to_seconds(sub.end.to_time())
+    def _distance_from_release(self, sub, current_release):
+        return (tools.levenshteinDistanceDP(sub["name"].lower(), current_release), sub)
+
 
         if index == 0 and start > threshold:
             return (time(0, 0, 0), sub.start.to_time())
