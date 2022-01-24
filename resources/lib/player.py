@@ -17,14 +17,14 @@ class Player(xbmc.Player):
 
     def onAVStarted(self):
         if self.getVideoInfoTag().getMediaType() == "episode":
-        self.intro = identify.get_intro()
-        if self.intro:
-            tools.log(
-                "Intro detected from {} to {}".format(self.intro[0], self.intro[1]),
-                "info",
-            )
-        else:
-            tools.log("No intro could be detected.", "info")
+            self.intro = self.identify.get_intro()
+            if self.intro:
+                tools.log(
+                    "Intro detected from {} to {}".format(self.intro[0], self.intro[1]),
+                    "info",
+                )
+            else:
+                tools.log("No intro could be detected.", "info")
 
     def onPlayBackStopped(self):
         self.reset_intro()
