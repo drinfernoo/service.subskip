@@ -44,7 +44,11 @@ class IdentifyCreditsIntro:
             return None
 
         for i, sub in enumerate(self._sub_contents):
-            gap = self._identify_potential(i, sub)
+            gap = self._identify_potential_gap(
+                i,
+                sub,
+                self._sub_contents[i + 1] if i < (len(self._sub_contents) - 1) else sub,
+            )
             if gap:
                 self._potentials.append(gap)
 
@@ -83,22 +87,23 @@ class IdentifyCreditsIntro:
     def _distance_from_release(self, sub, current_release):
         return (tools.levenshteinDistanceDP(sub["name"].lower(), current_release), sub)
 
+    def _identify_potential_gap(self, index, current_sub, next_sub, threshold=15):
+        start = tools.convert_time_to_seconds(current_sub.start.to_time())
+        end = tools.convert_time_to_seconds(current_sub.end.to_time())
+
+        # TODO: Find a way to skip over subs with certain content... ads, lyrics, etc
+        # if "subtitle" in current_sub.text.lower():
+        # tools.log("Ad detected, skipping...", "info")
+        # return self._identify_potential_gap(index, current_sub, self._sub_contents[index + 2])
 
         if index == 0 and start > threshold:
-            return (time(0, 0, 0), sub.start.to_time())
-        elif index > 0 and index < (len(self._sub_contents) - 1):
+            return (time(0, 0, 0), current_sub.start.to_time())
+        elif index > 0:
             if start < (self.total_time / 4):
-                next_start = tools.convert_time_to_seconds(
-                    self._sub_contents[index + 1].start.to_time()
-                )
-                next_end = tools.convert_time_to_seconds(
-                    self._sub_contents[index + 1].end.to_time()
-                )
+                next_start = tools.convert_time_to_seconds(next_sub.start.to_time())
+                next_end = tools.convert_time_to_seconds(next_sub.end.to_time())
 
                 if (next_start - end) > threshold:
-                    return (
-                        sub.end.to_time(),
-                        self._sub_contents[index + 1].start.to_time(),
-                    )
+                    return (current_sub.end.to_time(), next_sub.start.to_time())
 
         return ()
