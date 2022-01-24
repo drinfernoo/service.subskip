@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 import xbmc
+import xbmcvfs
 
 from resources.lib import settings
 from resources.lib import tools
 from resources.lib.player import Player
 from resources.lib.skip_dialog import IntroSkipDialog
 
-_addon_path = xbmc.translatePath(settings.get_addon_info('path'))
+_addon_path = xbmcvfs.translatePath(settings.get_addon_info('path'))
 
 
 def run():
