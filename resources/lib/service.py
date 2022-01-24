@@ -29,10 +29,10 @@ def run():
                 player.intro[0]
             ):
                 dialog.doModal()
-                player.intro_skipped()
+                player.reset_intro()
             if (
                 player.intro
                 and current_time >= tools.convert_time_to_seconds(player.intro[1])
             ) or not player.intro:
                 dialog.close()
-                player.intro_skipped()
+                player.reset_intro()
