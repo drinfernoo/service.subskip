@@ -29,8 +29,7 @@ def run():
             if player.intro and current_time >= tools.convert_time_to_seconds(
                 player.intro[0]
             ):
-                dialog.doModal()
-                player.reset_intro()
+                dialog.show()
             if (
                 player.intro
                 and current_time >= tools.convert_time_to_seconds(player.intro[1])
