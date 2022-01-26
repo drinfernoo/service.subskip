@@ -9,7 +9,6 @@ import pysrt
 
 from resources.lib import tools
 from resources.lib import subtitles
-from resources.lib.thread_pool import ThreadPool
 
 
 class IdentifyCreditsIntro:
@@ -49,7 +48,7 @@ class IdentifyCreditsIntro:
                 sub,
                 self._sub_contents[i + 1] if i < (len(self._sub_contents) - 1) else sub,
                 threshold=threshold,
-                ratio=ratio
+                ratio=ratio,
             )
             if gap:
                 self._potentials.append(gap)
@@ -67,7 +66,11 @@ class IdentifyCreditsIntro:
             tools.log("Subtitle file could not be downloaded.", "info")
             return []
         else:
-            tools.log("Attempting to identify intro from {}".format(sub_results[0]["name"], "info"))
+            tools.log(
+                "Attempting to identify intro from {}".format(
+                    sub_results[0]["name"], "info"
+                )
+            )
 
         sub_contents = pysrt.open(download)
         sub_contents = [
@@ -80,14 +83,16 @@ class IdentifyCreditsIntro:
                     r"opensubtitles|subscene|podnadpisi|addic7ed|bsplayer",
                     r"(?:^[\(].*[\)]$)|(?:^[\[].*[\]]$)",
                     r"(?:^[♩♪♫♬]+$)|(?:^[♩♪♫♬]+.*$)|(?:.*^[♩♪♫♬]+$)",
-                    r"</?\w+((\s+\w+(\s*=\s*(?:\".*?\"|'.*?'|[^'\">\s]+))?)+\s*|\s*)/?>"
+                    r"</?\w+((\s+\w+(\s*=\s*(?:\".*?\"|'.*?'|[^'\">\s]+))?)+\s*|\s*)/?>",
                 ]
             )
         ]
 
         return sub_contents
 
-    def _identify_potential_gap(self, index, current_sub, next_sub, threshold=15, ratio=0.25):
+    def _identify_potential_gap(
+        self, index, current_sub, next_sub, threshold=15, ratio=0.25
+    ):
         start = tools.convert_time_to_seconds(current_sub.start.to_time())
         end = tools.convert_time_to_seconds(current_sub.end.to_time())
 
