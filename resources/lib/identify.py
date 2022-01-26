@@ -1,6 +1,6 @@
 import xbmc
 
-import os
+import re
 from datetime import time
 
 from urllib.parse import unquote
@@ -39,11 +39,11 @@ class IdentifyCreditsIntro:
             return self._potentials[0]
 
     def _identify_points(self, threshold=15, ratio=0.25):
-        self._sub_contents = self._get_subtitles()
+        self._sub_contents = self._get_subtitles(ratio=ratio)
         if not self._sub_contents:
             return None
 
-        for i, sub in enumerate(self._sub_contents[:int(len(self._sub_contents) * ratio)]):
+        for i, sub in enumerate(self._sub_contents):
             gap = self._identify_potential_gap(
                 i,
                 sub,
@@ -54,7 +54,7 @@ class IdentifyCreditsIntro:
             if gap:
                 self._potentials.append(gap)
 
-    def _get_subtitles(self):
+    def _get_subtitles(self, ratio=0.25):
         sub_contents = []
 
         sub_results = self.a4k_api.search(self.base_request)
@@ -70,17 +70,26 @@ class IdentifyCreditsIntro:
             tools.log("Attempting to identify intro from {}".format(sub_results[0]["name"], "info"))
 
         sub_contents = pysrt.open(download)
+        sub_contents = [
+            s
+            for s in sub_contents[: int(len(sub_contents) * ratio)]
+            if not any(
+                re.search(i, s.text.lower())
+                for i in [
+                    r"subtitle|sub|sync|correction|caption",
+                    r"opensubtitles|subscene|podnadpisi|addic7ed|bsplayer",
+                    r"(?:^[\(].*[\)]$)|(?:^[\[].*[\]]$)",
+                    r"(?:^[♩♪♫♬]+$)|(?:^[♩♪♫♬]+.*[♩♪♫♬]+$)",
+                    r"</?\w+((\s+\w+(\s*=\s*(?:\".*?\"|'.*?'|[^'\">\s]+))?)+\s*|\s*)/?>"
+                ]
+            )
+        ]
 
         return sub_contents
 
     def _identify_potential_gap(self, index, current_sub, next_sub, threshold=15, ratio=0.25):
         start = tools.convert_time_to_seconds(current_sub.start.to_time())
         end = tools.convert_time_to_seconds(current_sub.end.to_time())
-
-        # TODO: Find a way to skip over subs with certain content... ads, lyrics, etc
-        # if "subtitle" in current_sub.text.lower():
-        # tools.log("Ad detected, skipping...", "info")
-        # return self._identify_potential_gap(index, current_sub, self._sub_contents[index + 2])
 
         if index == 0 and start > threshold:
             return (time(0, 0, 0), current_sub.start.to_time())
