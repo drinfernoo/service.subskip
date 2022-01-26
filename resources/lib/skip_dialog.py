@@ -19,7 +19,7 @@ class IntroSkipDialog(xbmcgui.WindowXMLDialog):
         self.skip_time = skip_time
 
     def onInit(self):
-        skipLabel = "{} >".format(settings.get_localized_string(30000))
+        skipLabel = "{} >".format(settings.get_localized_string(32000))
         skipButton = self.getControl(OK_BUTTON)
         skipButton.setLabel(skipLabel)
 
