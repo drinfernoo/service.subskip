@@ -12,10 +12,7 @@ class IntroSkipDialog(xbmcgui.WindowXMLDialog):
     def __init__(
         self, xmlFilename, scriptPath, defaultSkin='Default', defaultRes='720p'
     ):
-        self.skip_time = 0
-
-    def set_skip_time(self, skip_time):
-        self.skip_time = skip_time
+        pass
 
     def onInit(self):
         self.setProperty(
@@ -29,6 +26,6 @@ class IntroSkipDialog(xbmcgui.WindowXMLDialog):
 
     def onClick(self, control):
         if control == OK_BUTTON:
-            xbmc.Player().seekTime(tools.convert_time_to_seconds(self.skip_time) - 1)
-
+            skip_time = float(self.getProperty("skip_time"))
+            xbmc.Player().seekTime(skip_time - 1)
             self.close()
