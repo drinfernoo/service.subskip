@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+    <!-- General -->
+    <category label="32000">
+        <setting id="general.theme" label="32001" type="labelenum" lvalues="32002|32003" default="32002" />
+    </category>
+</settings>

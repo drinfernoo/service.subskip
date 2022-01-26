@@ -5,17 +5,12 @@
 	<animation effect="fade" start="100" end="0" time="300">WindowClose</animation>
 	<controls>
 		<control type="button" id="201">
-			<description>Later Button</description>
-			<width>200</width>
-			<height>40</height>
+			<width>236</width>
+			<height>108</height>
 			<align>left</align>
 			<aligny>center</aligny>
-			<label></label>
-			<font>font12_title</font>
-			<textcolor>FFFFFFFF</textcolor>
-			<texturenofocus>button-nofo.png</texturenofocus>
-			<texturefocus>button-fo.png</texturefocus>				
-			<textoffsetx>10</textoffsetx>
+			<texturenofocus>light_button.png</texturenofocus>
+			<texturefocus>light_button.png</texturefocus>
 		</control>
 	</controls>
 </window>
