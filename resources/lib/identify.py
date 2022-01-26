@@ -66,6 +66,8 @@ class IdentifyCreditsIntro:
         if not download:
             tools.log("Subtitle file could not be downloaded.", "info")
             return []
+        else:
+            tools.log("Attempting to identify intro from {}".format(sub_results[0]["name"], "info"))
 
         sub_contents = pysrt.open(download)
 

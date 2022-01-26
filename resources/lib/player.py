@@ -16,6 +16,7 @@ class Player(xbmc.Player):
         self.intro = None
 
     def onAVStarted(self):
+        tools.log("onAVStarted", "info")
         if self.getVideoInfoTag().getMediaType() == "episode":
             self.intro = self.identify.get_intro()
             if self.intro:
