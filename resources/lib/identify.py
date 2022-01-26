@@ -79,7 +79,7 @@ class IdentifyCreditsIntro:
                     r"subtitle|sub|sync|correction|caption",
                     r"opensubtitles|subscene|podnadpisi|addic7ed|bsplayer",
                     r"(?:^[\(].*[\)]$)|(?:^[\[].*[\]]$)",
-                    r"(?:^[♩♪♫♬]+$)|(?:^[♩♪♫♬]+.*[♩♪♫♬]+$)",
+                    r"(?:^[♩♪♫♬]+$)|(?:^[♩♪♫♬]+.*$)|(?:.*^[♩♪♫♬]+$)",
                     r"</?\w+((\s+\w+(\s*=\s*(?:\".*?\"|'.*?'|[^'\">\s]+))?)+\s*|\s*)/?>"
                 ]
             )
