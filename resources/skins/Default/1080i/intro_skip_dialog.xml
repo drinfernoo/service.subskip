@@ -7,8 +7,8 @@
 		<control type="button" id="201">
 			<width>236</width>
 			<height>108</height>
-			<align>left</align>
-			<aligny>center</aligny>
+			<bottom>300</bottom>
+			<right>48</right>
 			<texturenofocus>light_button.png</texturenofocus>
 			<texturefocus>light_button.png</texturefocus>
 		</control>
