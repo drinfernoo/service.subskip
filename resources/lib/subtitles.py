@@ -49,8 +49,8 @@ class A4kSubtitlesAdapter:
         try:
             sys.path.append(path)
             self.service = importlib.import_module("a4kSubtitles.api").A4kSubtitlesApi()
-        except ImportError:
-            pass
+        except ImportError as e:
+            tools.log("Can't find a4kSubtitles: {}".format(e), "error")
 
     def search(self, request, **extra):
         """
