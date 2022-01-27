@@ -1,15 +1,20 @@
 # -*- coding: utf-8 -*-
 import xbmc
 import xbmcgui
+import xbmcvfs
 
+from resources.lib import settings
 from resources.lib import tools
 from resources.lib.player import Player
+
+_addon_data = xbmcvfs.translatePath(settings.get_addon_info("profile"))
 
 
 def run():
     tools.log("Service starting...", "info")
     monitor = xbmc.Monitor()
     player = Player()
+    tools.create_folder(_addon_data)
 
     while not monitor.abortRequested():
         if monitor.waitForAbort(3):

@@ -12,7 +12,6 @@ from xml.etree import ElementTree
 
 from resources.lib import settings
 
-_addon_name = settings.get_addon_info("name")
 _addon_id = settings.get_addon_info("id")
 
 _log_levels = {
