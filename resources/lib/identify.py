@@ -3,10 +3,9 @@ import xbmc
 import re
 from datetime import time
 
-from urllib.parse import unquote
-
 import pysrt
 
+from resources.lib import local_points
 from resources.lib import tools
 from resources.lib import subtitles
 
@@ -24,34 +23,37 @@ class IdentifyCreditsIntro:
         self.initialize()
 
     def initialize(self):
-        self._sub_contents = []
-        self._potentials = []
         self.total_time = 0
 
     def get_intro(self):
         if xbmc.Player().isPlayingVideo():
             self.total_time = xbmc.Player().getTotalTime()
 
-        self._identify_points()
-
-        if len(self._potentials) >= 1:
-            return self._potentials[0]
-
-    def _identify_points(self, threshold=15, ratio=0.25):
-        self._sub_contents = self._get_subtitles(ratio=ratio)
-        if not self._sub_contents:
+            potentials = local_points.get_local_points()
+            if not potentials:
+                potentials = self._identify_points()
+            if len(potentials) >= 1:
+                return potentials[0]
+        else:
             return None
 
-        for i, sub in enumerate(self._sub_contents):
+    def _identify_points(self, threshold=15, ratio=0.25):
+        sub_contents = self._get_subtitles(ratio=ratio)
+        if not sub_contents:
+            return None
+
+        potentials = []
+        for i, sub in enumerate(sub_contents):
             gap = self._identify_potential_gap(
                 i,
                 sub,
-                self._sub_contents[i + 1] if i < (len(self._sub_contents) - 1) else sub,
+                sub_contents[i + 1] if i < (len(sub_contents) - 1) else sub,
                 threshold=threshold,
                 ratio=ratio,
             )
             if gap:
-                self._potentials.append(gap)
+                potentials.append(gap)
+        return potentials
 
     def _get_subtitles(self, ratio=0.25):
         sub_contents = []
