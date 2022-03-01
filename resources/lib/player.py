@@ -13,17 +13,20 @@ _addon_path = xbmcvfs.translatePath(settings.get_addon_info('path'))
 class Player(xbmc.Player):
     def __init__(self):
         super().__init__("Player")
+        self.dialog = IntroSkipDialog(
+            "intro_skip_dialog.xml", _addon_path, "Default", "1080i"
+        )
 
     def reset_intro(self):
         self.dialog.close()
         self.identify.initialize()
         self.intro = None
 
+    def getIntro(self):
+        return self.intro
+
     def onPlayBackStarted(self):
         tools.log("onPlayBackStarted", "debug")
-        self.dialog = IntroSkipDialog(
-            "intro_skip_dialog.xml", _addon_path, "Default", "1080i"
-        )
         self.identify = IdentifyCreditsIntro()
         self.intro = None
 

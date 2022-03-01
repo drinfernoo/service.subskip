@@ -19,9 +19,11 @@ class IntroSkipDialog(xbmcgui.WindowXMLDialog):
             "button_style",
             "{}_button.png".format(settings.get_setting("general.theme").lower()),
         )
+        self.setProperty("cancelled", "False")
 
     def onAction(self, action):
         if action == ACTION_PREVIOUS_MENU or action == ACTION_BACK:
+            self.setProperty("cancelled", "True")
             self.close()
 
     def onClick(self, control):
@@ -29,3 +31,11 @@ class IntroSkipDialog(xbmcgui.WindowXMLDialog):
             skip_time = float(self.getProperty("skip_time"))
             xbmc.Player().seekTime(skip_time - 1)
             self.close()
+
+    def isCancelled(self):
+        if self.getProperty("cancelled") == "False":
+            return False
+        elif self.getProperty("cancelled") == "True":
+            return True
+
+        return None

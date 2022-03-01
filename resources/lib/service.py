@@ -21,20 +21,21 @@ def run():
             # Abort was requested while waiting. We should exit
             break
 
-        if player.isPlayingVideo() and player.intro:
+        if player.isPlayingVideo() and player.getIntro() is not None:
             current_time = player.getTime()
             player.dialog.setProperty(
                 "skip_time", str(tools.convert_time_to_seconds(player.intro[1]))
             )
 
             if (
-                player.intro
+                player.getIntro() is not None
+                and not player.dialog.isCancelled()
                 and current_time >= tools.convert_time_to_seconds(player.intro[0])
                 and xbmcgui.getCurrentWindowDialogId() < 13000
             ):
                 player.dialog.show()
             if (
-                player.intro
+                player.getIntro() is not None
                 and current_time >= tools.convert_time_to_seconds(player.intro[1])
-            ) or not player.intro:
+            ) or player.getIntro() is None:
                 player.reset_intro()
