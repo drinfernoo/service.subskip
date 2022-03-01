@@ -15,7 +15,7 @@ Automatically detects intro sequences in TV episodes, and offers to skip them!
 
 **THIS REPO SOURCE IS NOT YET ACTIVE**
 
-Steps to install a4kSubtitles:
+Steps to install a4kSkips:
 1. Go to the KODI **File manager**.
 2. Click on **Add source**.
 3. The path for the source is https://a4k-openproject.github.io/repository.a4kSkips/
