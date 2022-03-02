@@ -1,5 +1,7 @@
 import xbmc
+import xbmcvfs
 
+import os
 import re
 from datetime import time
 
@@ -7,7 +9,12 @@ import pysrt
 
 from resources.lib import local_points
 from resources.lib import tools
+from resources.lib import settings
 from resources.lib import subtitles
+
+_a4kSubs = xbmcvfs.translatePath(
+    settings.get_addon_info("profile", "service.subtitles.a4ksubtitles")
+)
 
 
 class IdentifyCreditsIntro:
@@ -55,6 +62,17 @@ class IdentifyCreditsIntro:
                 potentials.append(gap)
         return potentials
 
+    def _get_auto_downloaded_subtitles(self):
+        for srt in [
+            i for i in os.listdir(os.path.join(_a4kSubs, "temp")) if i.endswith(".srt")
+        ]:
+            path = os.path.join(_a4kSubs, "temp", srt)
+            tools.log(
+                "Using auto-downloaded subtitle file from a4kSubtitles: " + path, "info"
+            )
+
+            return path
+
     def _get_subtitles(self, ratio=0.25):
         sub_contents = []
 
@@ -63,7 +81,9 @@ class IdentifyCreditsIntro:
             tools.log("No subtitles could be found for the playing file.", "info")
             return []
 
-        download = self.a4k_api.download(sub_results[0])
+        download = self._get_auto_downloaded_subtitles() or self.a4k_api.download(
+            sub_results[0]
+        )
         if not download:
             tools.log("Subtitle file could not be downloaded.", "info")
             return []
