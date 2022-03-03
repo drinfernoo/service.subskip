@@ -44,5 +44,5 @@ class Player(xbmc.Player):
 
     def onPlayBackStopped(self):
         tools.log("onPlaybackStopped", "debug")
+        self.dialog.close()
         self.reset_intro()
-        del self.dialog
