@@ -3,5 +3,6 @@
     <!-- General -->
     <category label="32000">
         <setting id="general.theme" label="32001" type="labelenum" lvalues="32002|32003" default="32002" />
+        <setting id="general.use_a4ksubs" label="32004" type="bool" default="true" visible="System.HasAddon(service.subtitles.a4ksubtitles)" />
     </category>
 </settings>
