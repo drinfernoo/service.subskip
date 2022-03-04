@@ -149,13 +149,23 @@ class A4kSubtitlesAdapter(PointsAdapter):
             s
             for s in sub_contents[: int(len(sub_contents) * ratio)]
             if not any(
-                re.search(i, s.text.lower())
-                for i in [
-                    r"subtitle|sub|sync|correction|caption",
-                    r"opensubtitles|subscene|podnadpisi|addic7ed|bsplayer",
-                    r"(?:^[\(].*[\)]$)|(?:^[\[].*[\]]$)",
-                    r"(?:^[♩♪♫♬]+$)|(?:^[♩♪♫♬]+.*$)|(?:.*^[♩♪♫♬]+$)",
-                    r"</?\w+((\s+\w+(\s*=\s*(?:\".*?\"|'.*?'|[^'\">\s]+))?)+\s*|\s*)/?>",
+                [
+                    re.search(
+                        i,
+                        re.sub(
+                            r"\{.*\}|(<\/?\w+((\s+\w+(\s*=\s*(?:\".*?\"|'.*?'|[^'\">\s]+))?)+\s*|\s*)?>)",
+                            "",
+                            s.text.lower(),
+                        ),
+                        re.DOTALL,
+                    )
+                    for i in [
+                        r"subtitle|sub|sync|correction|caption",
+                        r"opensubtitles|subscene|podnadpisi|addic7ed|bsplayer",
+                        r"(?:^[\(].*[\)]$)|(?:^[\[].*[\]]$)",
+                        r"(?:^[♩♪♫♬]+$)|(?:^[♩♪♫♬]+.*$)|(?:.*^[♩♪♫♬]+$)",
+                        r"</?\w+((\s+\w+(\s*=\s*(?:\".*?\"|'.*?'|[^'\">\s]+))?)+\s*|\s*)/?>",
+                    ]
                 ]
             )
         ]
