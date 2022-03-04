@@ -38,8 +38,9 @@ class Player(xbmc.Player):
             season = str(video_meta.getSeason())
             episode = str(video_meta.getEpisode())
 
-            self.intro = self.identifier.get_intro(imdb_id, season, episode)
-            if self.intro:
+            intro_point = self.identifier.get_intro(imdb_id, season, episode)
+            if intro_point is not None and len(intro_point) >= 1:
+                self.intro = intro_point[0]
                 tools.log(
                     "Intro detected from {} to {}".format(self.intro[0], self.intro[1]),
                     "info",
