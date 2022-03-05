@@ -37,4 +37,3 @@ def run():
                 dialog.show()
             if current_time >= tools.convert_time_to_seconds(intro[1]):
                 dialog.close()
-                player.reset_intro()
