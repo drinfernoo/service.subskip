@@ -109,16 +109,18 @@ class A4kSubtitlesAdapter(PointsAdapter):
         if not self.enabled:
             return None
 
-        sub_contents = self._get_subtitle_contents()
-        if not sub_contents:
-            return None
-
         if type in ["recap", "intro"]:
             ratio = (0, 0.25)
         elif type in ["commercial"]:
             ratio = (0.25, 0.75)
         elif type in ["outro", "credits"]:
             ratio = (0.75, 1)
+        else:
+            ratio = (0, 1)
+
+        sub_contents = self._get_subtitle_contents(ratio)
+        if not sub_contents:
+            return None
 
         potentials = []
         for i, sub in enumerate(sub_contents):
@@ -126,8 +128,6 @@ class A4kSubtitlesAdapter(PointsAdapter):
                 i,
                 sub,
                 sub_contents[i + 1] if i < (len(sub_contents) - 1) else sub,
-                ratio=ratio,
-                threshold=15,
             )
             if gap:
                 potentials.append(gap)
@@ -181,22 +181,17 @@ class A4kSubtitlesAdapter(PointsAdapter):
 
         return sub_contents
 
-    def _identify_potential_gap(
-        self, index, current_sub, next_sub, ratio, threshold=15
-    ):
+    def _identify_potential_gap(self, index, current_sub, next_sub, threshold=15):
         start = tools.convert_time_to_seconds(current_sub.start.to_time())
         end = tools.convert_time_to_seconds(current_sub.end.to_time())
 
         if index == 0 and start > threshold:
             return (time(0, 0, 0), current_sub.start.to_time())
         elif index > 0:
-            if start >= (self.total_time * ratio[0]) and start <= (
-                self.total_time * ratio[1]
-            ):
-                next_start = tools.convert_time_to_seconds(next_sub.start.to_time())
+            next_start = tools.convert_time_to_seconds(next_sub.start.to_time())
 
-                if (next_start - end) > threshold:
-                    return (current_sub.end.to_time(), next_sub.start.to_time())
+            if (next_start - end) > threshold:
+                return (current_sub.end.to_time(), next_sub.start.to_time())
 
         return ()
 
