@@ -20,6 +20,9 @@ class Player(xbmc.Player):
             "intro_skip_dialog.xml", _addon_path, "Default", "1080i"
         )
 
+    def reset_intro(self):
+        self.intro = None
+
     def get_intro(self):
         return self.intro
 
@@ -28,7 +31,7 @@ class Player(xbmc.Player):
 
     def onPlayBackStarted(self):
         tools.log("onPlayBackStarted", "debug")
-        self.intro = None
+        self.reset_intro()
 
     def onAVStarted(self):
         tools.log("onAVStarted", "debug")
@@ -51,4 +54,4 @@ class Player(xbmc.Player):
     def onPlayBackStopped(self):
         tools.log("onPlaybackStopped", "debug")
         self.dialog.close()
-        self.intro = None
+        self.reset_intro()
