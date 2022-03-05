@@ -113,20 +113,27 @@ class A4kSubtitlesAdapter(PointsAdapter):
         if not sub_contents:
             return None
 
+        if type in ["recap", "intro"]:
+            ratio = (0, 0.25)
+        elif type in ["commercial"]:
+            ratio = (0.25, 0.75)
+        elif type in ["outro", "credits"]:
+            ratio = (0.75, 1)
+
         potentials = []
         for i, sub in enumerate(sub_contents):
             gap = self._identify_potential_gap(
                 i,
                 sub,
                 sub_contents[i + 1] if i < (len(sub_contents) - 1) else sub,
+                ratio=ratio,
                 threshold=15,
-                ratio=0.25,
             )
             if gap:
                 potentials.append(gap)
         return potentials
 
-    def _get_subtitle_contents(self, ratio=0.25):
+    def _get_subtitle_contents(self, ratio):
         sub_contents = []
 
         # if self.get_auto_download_enabled():
@@ -147,7 +154,9 @@ class A4kSubtitlesAdapter(PointsAdapter):
         sub_contents = pysrt.open(download)
         sub_contents = [
             s
-            for s in sub_contents[: int(len(sub_contents) * ratio)]
+            for s in sub_contents[
+                int(len(sub_contents) * ratio[0]) : int(len(sub_contents) * ratio[1])
+            ]
             if not any(
                 [
                     re.search(
@@ -173,7 +182,7 @@ class A4kSubtitlesAdapter(PointsAdapter):
         return sub_contents
 
     def _identify_potential_gap(
-        self, index, current_sub, next_sub, threshold=15, ratio=0.25
+        self, index, current_sub, next_sub, ratio, threshold=15
     ):
         start = tools.convert_time_to_seconds(current_sub.start.to_time())
         end = tools.convert_time_to_seconds(current_sub.end.to_time())
@@ -181,7 +190,9 @@ class A4kSubtitlesAdapter(PointsAdapter):
         if index == 0 and start > threshold:
             return (time(0, 0, 0), current_sub.start.to_time())
         elif index > 0:
-            if start < (self.total_time * ratio):
+            if start >= (self.total_time * ratio[0]) and start <= (
+                self.total_time * ratio[1]
+            ):
                 next_start = tools.convert_time_to_seconds(next_sub.start.to_time())
 
                 if (next_start - end) > threshold:
