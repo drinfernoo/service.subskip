@@ -172,8 +172,8 @@ class A4kSubtitlesAdapter(PointsAdapter):
                         r"subtitle|sub|sync|correction|caption",  # attribution
                         r"opensubtitles|subscene|podnadpisi|addic7ed|bsplayer",  # attribution
                         r"(?:^[\(].*[\)]$)|(?:^[\[].*[\]]$)",  # only bracketed text
-                        r"(?:^[♩♪♫♬]+$)|(?:^[♩♪♫♬]+.*$)|(?:.*^[♩♪♫♬]+$)",  # lyrics
-                        r"(?:^([\W]{1})?.*\1$)",  # anything surrounded by non-word characters
+                        r"(?:[♩♪♫♬*]+)|(?:[♩♪♫♬*]+.*)|(?:.*[♩♪♫♬*]+)",  # lyrics
+                        # r"(?:^([\W]{1})?.*\1$)",  # anything surrounded by non-word characters
                     ]
                 ]
             )
