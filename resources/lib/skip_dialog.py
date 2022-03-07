@@ -16,10 +16,14 @@ class IntroSkipDialog(xbmcgui.WindowXMLDialog):
 
     def onInit(self):
         theme = settings.get_setting("general.theme").lower()
+        color = settings.get_setting_string("general.accent_color")
+
         if theme == "light":
             self.setProperty("theme.color", "fff5f5f5")
         elif theme == "dark":
             self.setProperty("theme.color", "ff232323")
+
+        self.setProperty("theme.accent_color", color)
 
         self.setProperty("cancelled", "False")
 

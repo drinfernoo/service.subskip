@@ -29,14 +29,14 @@
 				<control type="image">
 					<width>36</width>
 					<height>36</height>
-					<texture colordiffuse="ffe53935">skip-next.png</texture>
+					<texture colordiffuse="$INFO[Window.Property(theme.accent_color)]">skip-next.png</texture>
 				</control>
 				
 				<control type="label">
 					<width>auto</width>
 					<height>36</height>
 					<label>Skip Intro</label>
-					<textcolor>ffe53935</textcolor>
+					<textcolor>Window.Property(theme.accent_color)</textcolor>
 				</control>
 			</control>
 		</control>
