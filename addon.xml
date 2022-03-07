@@ -8,7 +8,7 @@
 		<import addon="script.service.a4ksubtitles" optional="true"/>
     </requires>
     
-    <extension point="xbmc.python.pluginsource" library="main.py"/>
+    <extension point="xbmc.python.script" library="main.py"/>
 
     <extension point="xbmc.service" library="service.py" start="startup"/>
 
