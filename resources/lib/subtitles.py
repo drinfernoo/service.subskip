@@ -162,18 +162,17 @@ class A4kSubtitlesAdapter(PointsAdapter):
                     re.search(
                         i,
                         re.sub(
-                            r"\{.*\}|(<\/?\w+((\s+\w+(\s*=\s*(?:\".*?\"|'.*?'|[^'\">\s]+))?)+\s*|\s*)?>)",
+                            r"\{.*\}|(<\/?\w+((\s+\w+(\s*=\s*(?:\".*?\"|'.*?'|[^'\">\s]+))?)+\s*|\s*)?>)",  # strip formatting tags
                             "",
                             s.text.lower(),
                         ),
                         re.DOTALL,
                     )
                     for i in [
-                        r"subtitle|sub|sync|correction|caption",
-                        r"opensubtitles|subscene|podnadpisi|addic7ed|bsplayer",
-                        r"(?:^[\(].*[\)]$)|(?:^[\[].*[\]]$)",
-                        r"(?:^[♩♪♫♬]+$)|(?:^[♩♪♫♬]+.*$)|(?:.*^[♩♪♫♬]+$)",
-                        r"</?\w+((\s+\w+(\s*=\s*(?:\".*?\"|'.*?'|[^'\">\s]+))?)+\s*|\s*)/?>",
+                        r"subtitle|sub|sync|correction|caption",  # attribution
+                        r"opensubtitles|subscene|podnadpisi|addic7ed|bsplayer",  # attribution
+                        r"(?:^[\(].*[\)]$)|(?:^[\[].*[\]]$)",  # only bracketed text
+                        r"(?:^[♩♪♫♬]+$)|(?:^[♩♪♫♬]+.*$)|(?:.*^[♩♪♫♬]+$)",  # lyrics
                     ]
                 ]
             )
