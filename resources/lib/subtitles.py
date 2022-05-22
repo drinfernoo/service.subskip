@@ -151,7 +151,12 @@ class A4kSubtitlesAdapter(PointsAdapter):
             tools.log("Subtitle file could not be found.", "info")
             return []
 
-        sub_contents = pysrt.open(download, encoding="utf-8")
+        try:
+            sub_contents = pysrt.open(download, encoding="utf-8")
+        except UnicodeDecodeError:
+            with open(download) as f:
+                sub_contents = pysrt.from_string(f.read())
+
         sub_contents = [
             s
             for s in sub_contents[
