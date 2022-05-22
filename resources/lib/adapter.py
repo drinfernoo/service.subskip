@@ -1,6 +1,7 @@
-class PointsAdapter:
-    def __init__(self):
-        pass
+import abc
 
+
+class PointsAdapter:
+    @abc.abstractmethod
     def get_points(self, imdb, season, episode, type=None):
-        raise NotImplementedError
+        """Get points for a specific playing file."""

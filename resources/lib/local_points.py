@@ -13,9 +13,6 @@ _addon_data = xbmcvfs.translatePath(settings.get_addon_info("profile"))
 
 
 class LocalPointsAdapter(PointsAdapter):
-    def __init__(self):
-        pass
-
     def get_points(self, imdb_id, season, episode, type=None):
         data_points = {}
         file_path = os.path.join(_addon_data, "skip_points", "{}.json".format(imdb_id))
