@@ -18,6 +18,7 @@ from resources.lib import tools
 
 _addons_path = xbmcvfs.translatePath("special://home/addons/")
 _a4kSubtitles_id = "service.subtitles.a4ksubtitles"
+_gap_debug = settings.get_setting_boolean("general.debug_log_gap_detection")
 
 
 def get_kodi_subtitle_languages(iso_format=False):
@@ -124,6 +125,18 @@ class A4kSubtitlesAdapter(PointsAdapter):
 
         potentials = []
         for i, sub in enumerate(sub_contents):
+            if _gap_debug:
+                tools.log(i, "debug")
+                tools.log(
+                    "{} --> {}".format(
+                        sub.start.to_time().strftime("%I:%M:%S,%f"),
+                        sub.start.to_time().strftime("%I:%M:%S,%f"),
+                    ),
+                    "debug",
+                )
+                tools.log(sub.text, "debug")
+                tools.log("\n", "debug")
+
             gap = self._identify_potential_gap(
                 i,
                 sub,
