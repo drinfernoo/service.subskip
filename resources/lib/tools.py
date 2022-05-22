@@ -51,29 +51,34 @@ def remove_file(path):
 
 def read_from_file(file_path):
     try:
-        f = xbmcvfs.File(file_path, "r")
-        content = f.read()
+        with xbmcvfs.File(file_path, "r") as f:
+            content = f.read()
         return content
     except IOError:
         return None
-    finally:
-        try:
-            f.close()
-        except:
-            pass
 
 
 def write_to_file(file_path, content):
     try:
-        f = xbmcvfs.File(file_path, "w")
-        return f.write(content)
+        with xbmcvfs.File(file_path, "w") as f:
+            success = f.write(content)
+        return success
     except IOError:
         return None
-    finally:
+
+
+def read_json(file_path):
+    content = read_from_file(file_path)
+    if content:
         try:
-            f.close()
-        except:
-            pass
+            return json.loads(content)
+        except json.JSONDecodeError:
+            log("Could not read JSON from file: {}".format(file_path), level="error")
+    return content
+
+
+def write_json(file_path, json_object):
+    return write_to_file(file_path, json.dumps(json_object))
 
 
 def parse_xml(file=None, text=None):
