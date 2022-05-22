@@ -16,12 +16,12 @@ class LocalPointsAdapter(PointsAdapter):
     def get_points(self, imdb_id, season, episode, type=None):
         data_points = {}
         file_path = os.path.join(_addon_data, "skip_points", "{}.json".format(imdb_id))
-        if not os.path.exists(file_path):
+        if (
+            not os.path.exists(file_path)
+            or (data_points := tools.read_json(file_path)) is None
+        ):
             tools.log("No local skip points found for the playing file.", "info")
             return None
-
-        with open(file_path) as f:
-            data_points = json.load(f)
 
         show_points = data_points.get("show", {})
         season_points = data_points.get("seasons", {}).get(season, {})
