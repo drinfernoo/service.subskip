@@ -22,7 +22,7 @@ def run():
             break
 
         intro = player.get_intro()
-        if intro is not None:
+        if intro is not None and player.isPlayingVideo():
             dialog = player.get_dialog()
             current_time = player.getTime()
             dialog.setProperty(
