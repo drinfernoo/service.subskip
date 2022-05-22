@@ -170,14 +170,15 @@ class A4kSubtitlesAdapter(PointsAdapter):
                             r"\{.*\}|(<\/?\w+((\s+\w+(\s*=\s*(?:\".*?\"|'.*?'|[^'\">\s]+))?)+\s*|\s*)?>)",  # strip formatting tags
                             "",
                             s.text.lower(),
-                        ),
+                        ).strip(),  # strip extra white space
                         re.DOTALL,
                     )
                     for i in [
+                        r"",  # empty string
                         r"subtitle|sub|sync|correction|caption",  # attribution
                         r"opensubtitles|subscene|podnadpisi|addic7ed|bsplayer",  # attribution
                         r"(?:^[\(].*[\)]$)|(?:^[\[].*[\]]$)",  # only bracketed text
-                        r"(?:[♩♪♫♬*]+)|(?:[♩♪♫♬*]+.*)|(?:.*[♩♪♫♬*]+)",  # lyrics
+                        r"(?:[♩♪♫♬¶*]+)|(?:[♩♪♫♬¶*]+.*)|(?:.*[♩♪♫♬¶*]+)",  # lyrics
                         # r"(?:^([\W]{1})?.*\1$)",  # anything surrounded by non-word characters
                     ]
                 ]
