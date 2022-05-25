@@ -4,6 +4,7 @@ from __future__ import absolute_import, division, unicode_literals
 import xbmc
 import xbmcvfs
 
+from datetime import datetime
 import json
 import os
 import shutil
@@ -13,6 +14,8 @@ from xml.etree import ElementTree
 from resources.lib import settings
 
 _addon_id = settings.get_addon_info("id")
+_userdata = xbmcvfs.translatePath(settings.get_addon_info("profile"))
+_debug_log = settings.get_setting_boolean("general.debug_log")
 
 _log_levels = {
     "debug": xbmc.LOGDEBUG,
@@ -58,7 +61,9 @@ def read_from_file(file_path):
         return None
 
 
-def write_to_file(file_path, content):
+def write_to_file(file_path, content, append=False):
+    if append:
+        content += read_from_file(file_path)
     try:
         with xbmcvfs.File(file_path, "w") as f:
             success = f.write(content)
@@ -96,7 +101,15 @@ def parse_xml(file=None, text=None):
 
 
 def log(msg, level="debug"):
-    xbmc.log("[ {} ] {}".format(_addon_id, msg), level=_log_levels[level])
+    formatted = "[ {} ] {}".format(_addon_id, msg)
+    xbmc.log(formatted, level=_log_levels[level])
+    if _debug_log:
+        time_format = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        write_to_file(
+            os.path.join(_userdata, "a4kskips.log"),
+            time_format + " > " + formatted,
+            append=True,
+        )
 
 
 def ensure_path_is_dir(path):
