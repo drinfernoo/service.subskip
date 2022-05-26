@@ -4,13 +4,41 @@
 	<animation effect="fade" start="0" end="100" time="300">WindowOpen</animation>
 	<animation effect="fade" start="100" end="0" time="300">WindowClose</animation>
 	<controls>
-		<control type="button" id="201">
+		<!-- Skip Intro -->
+		<control type="group" id="200">
 			<width>236</width>
 			<height>108</height>
 			<bottom>300</bottom>
-			<right>48</right>
-			<texturenofocus>light_button.png</texturenofocus>
-			<texturefocus>light_button.png</texturefocus>
+			<right>16</right>
+			<defaultcontrol>201</defaultcontrol>
+							
+			<control type="button" id="201">
+				<texturenofocus colordiffuse="$INFO[Window.Property(theme.color)]">light_button_blank.png</texturenofocus>
+				<texturefocus colordiffuse="$INFO[Window.Property(theme.color)]">light_button_blank.png</texturefocus>
+			</control>
+			
+			<!-- To keep icon and text centered in button -->
+			<control type="grouplist">
+				<width>236</width>
+				<height>108</height>
+				<top>36</top>
+				<itemgap>8</itemgap>
+				<align>center</align>
+				<orientation>horizontal</orientation>
+				
+				<control type="image">
+					<width>36</width>
+					<height>36</height>
+					<texture colordiffuse="$INFO[Window.Property(theme.accent_color)]">skip-next.png</texture>
+				</control>
+				
+				<control type="label">
+					<width>auto</width>
+					<height>36</height>
+					<label>Skip Intro</label>
+					<textcolor>Window.Property(theme.accent_color)</textcolor>
+				</control>
+			</control>
 		</control>
 	</controls>
 </window>

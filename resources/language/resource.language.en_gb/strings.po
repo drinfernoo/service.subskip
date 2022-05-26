@@ -33,3 +33,15 @@ msgstr ""
 msgctxt "#32003"
 msgid "Dark"
 msgstr ""
+
+msgctxt "#32004"
+msgid "Automatically Identify Points Using a4kSubtitles"
+msgstr ""
+
+msgctxt "#32005"
+msgid "Color Accent"
+msgstr "Color Accent"
+
+msgctxt "#32006"
+msgid "Choose a Color"
+msgstr "Choose a Color"
