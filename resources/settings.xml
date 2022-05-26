@@ -8,7 +8,6 @@
                  default="[COLOR forestgreen]forestgreen[/COLOR]"/>
         <setting id="general.accent_color" label="32005" type="text" visible="false" default="forestgreen" />
         <setting id="general.use_a4ksubs" label="32004" type="bool" default="true" visible="System.HasAddon(service.subtitles.a4ksubtitles)" />
-        <setting id="general.debug_log" label="Dedicated Log File" type="bool" default="false" />
-        <setting id="general.debug_log_gap_detection" label="Log Gap Detection" type="bool" default="false" />
+        <setting id="general.debug_log_gap_detection" label="Log Gap Detection in Debug" type="bool" default="false" />
     </category>
 </settings>
