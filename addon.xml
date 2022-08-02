@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="service.a4kSkips" name="a4kSkips" version="0.0.4" provider-name="drinfernoo">
+<addon id="service.subskip" name="SubSkip" version="0.0.5" provider-name="drinfernoo">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
-        <import addon="script.module.web-pdb"/>
 		<import addon="script.module.requests"/>
         <import addon="script.module.pymysql"/>
 		<import addon="script.service.a4ksubtitles" optional="true"/>
     </requires>
     
     <extension point="xbmc.python.script" library="main.py"/>
+    <extension point="xbmc.python.pluginsource" library="test.py">
+        <provides>executable</provides>
+    </extension>
 
     <extension point="xbmc.service" library="service.py" start="startup"/>
 
