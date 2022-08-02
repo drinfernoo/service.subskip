@@ -187,7 +187,7 @@ class A4kSubtitlesAdapter(PointsAdapter):
                         re.DOTALL,
                     )
                     for i in [
-                        r"",  # empty string
+                        # r"",  # empty string
                         r"subtitle|sub|sync|correction|caption",  # attribution
                         r"opensubtitles|subscene|podnadpisi|addic7ed|bsplayer",  # attribution
                         r"(?:^[\(].*[\)]$)|(?:^[\[].*[\]]$)",  # only bracketed text
